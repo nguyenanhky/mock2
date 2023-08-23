@@ -1,7 +1,9 @@
 package com.udacity.asteroidradar.api
 
-import com.udacity.asteroidradar.Asteroid
+
+import android.annotation.SuppressLint
 import com.udacity.asteroidradar.Constants
+import com.udacity.asteroidradar.data.model.Asteroid
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*
@@ -57,3 +59,17 @@ private fun getNextSevenDaysFormattedDates(): ArrayList<String> {
 
     return formattedDateList
 }
+@SuppressLint("WeekBasedYear")
+fun getFormattedToday():String{
+    val calendar = Calendar.getInstance()
+    val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT,Locale.getDefault())
+    return dateFormat.format(calendar.time)
+}
+@SuppressLint("WeekBasedYear")
+fun getFormattedSeventhDay():String{
+    val calendar = Calendar.getInstance()
+    calendar.add(Calendar.DAY_OF_YEAR,7)
+    val dateFormat = SimpleDateFormat(Constants.API_QUERY_DATE_FORMAT,Locale.getDefault())
+    return dateFormat.format(calendar.time)
+}
+
