@@ -45,6 +45,12 @@ class MainViewModel(application: Application) : ViewModel() {
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedAsteroid.value = asteroid
     }
+
+
+    fun displayAsteroidDetailsComplete() {
+        _navigateToSelectedAsteroid.value = null
+    }
+
     /**
      * factory dependency
      */
