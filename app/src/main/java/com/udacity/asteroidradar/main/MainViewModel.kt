@@ -5,9 +5,11 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.udacity.asteroidradar.FilterAsteroid
 import com.udacity.asteroidradar.data.getDatabase
 import com.udacity.asteroidradar.data.model.Asteroid
 import com.udacity.asteroidradar.repositories.AsteroidRepository
@@ -29,6 +31,19 @@ class MainViewModel(application: Application) : ViewModel() {
     val navigateToSelectedAsteroid: LiveData<Asteroid>
         get() = _navigateToSelectedAsteroid
 
+    private var _filterAsteroid = MutableLiveData(FilterAsteroid.ALL)
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val asteroidList = Transformations.switchMap(_filterAsteroid) {
+        when (it!!) {
+            FilterAsteroid.WEEK -> asteroidRepository.weekAsteroids
+            FilterAsteroid.TODAY -> asteroidRepository.todayAsteroids
+            else -> asteroidRepository.asteroids
+        }
+    }
+
+
     init {
         viewModelScope.launch {
             pictureOfTheDayRepository.refreshPictureOfTheDay()
@@ -40,8 +55,11 @@ class MainViewModel(application: Application) : ViewModel() {
     val asteroid = asteroidRepository.asteroids
     val pictureOfTheDay = pictureOfTheDayRepository.getPictureOfTheDay()
 
+    fun onChangeFilter(filter: FilterAsteroid) {
+        _filterAsteroid.postValue(filter)
+    }
 
-    // initiate navigation to the detail screen
+        // initiate navigation to the detail screen
     fun displayAsteroidDetails(asteroid: Asteroid) {
         _navigateToSelectedAsteroid.value = asteroid
     }

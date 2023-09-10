@@ -20,6 +20,7 @@ class PictureOfTheDayRepository(private val database: AsteroidsDatabase) {
         private const val TAG = "PictureOfTheDayRepository"
     }
 
+    // cách sử dụng khác của Transtion.map chuyển đổi kiểu dữ liệu
     fun getPictureOfTheDay(): LiveData<PictureOfTheDay> {
         val pictureOfTheDayDaoLiveData = database.pictureOfTheDayDao.getPictureOfTheDay()
 

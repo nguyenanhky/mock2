@@ -59,3 +59,33 @@ fun PictureOfTheDayEntity.toDomainModel(): PictureOfTheDay {
         url = this.url
     )
 }
+
+//fun List<AsteroidEntity>.asDomainModel(): List<Asteroid> {
+//    return map {
+//        Asteroid(
+//            id = it.id,
+//            codename = it.codeName,
+//            closeApproachDate = it.closeApproachDate,
+//            absoluteMagnitude = it.absMagnitude,
+//            estimatedDiameter = it.estDiaMax,
+//            relativeVelocity = it.relativeVelocity,
+//            distanceFromEarth = it.distanceFromEarth,
+//            isPotentiallyHazardous = it.isHazardous
+//        )
+//    }
+//}
+
+fun List<Asteroid>.asDatabaseModel(): Array<AsteroidEntity> {
+    return map {
+        AsteroidEntity(
+            id = it.id,
+            codeName = it.codename,
+            closeApproachDate = it.closeApproachDate,
+            absMagnitude = it.absoluteMagnitude,
+            estDiaMax = it.estimatedDiameter,
+            relativeVelocity = it.relativeVelocity,
+            distanceFromEarth = it.distanceFromEarth,
+            isHazardous = it.isPotentiallyHazardous
+        )
+    }.toTypedArray()
+}

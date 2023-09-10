@@ -4,7 +4,6 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
 import com.udacity.asteroidradar.Constants
 import com.udacity.asteroidradar.api.AsteroidApi
 import com.udacity.asteroidradar.api.getFormattedSeventhDay
@@ -17,8 +16,17 @@ import com.udacity.asteroidradar.data.toDomainModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.json.JSONObject
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class AsteroidRepository(private val database: AsteroidsDatabase) {
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val startDate = LocalDateTime.now()
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private val endDate = LocalDateTime.now().minusDays(7)
 
 
     // convert your LiveData list of DatabaseVideo objects to model video objects
@@ -28,6 +36,31 @@ class AsteroidRepository(private val database: AsteroidsDatabase) {
             value = asteroidList
         }
     }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val todayAsteroids: LiveData<List<Asteroid>> = MediatorLiveData<List<Asteroid>>().apply {
+        addSource(database.asteroidDao.getAsteroidsDay(startDate.format(DateTimeFormatter.ISO_DATE))) {
+            val todayAsteroidList = it.toDomainModel()
+            value = todayAsteroidList
+        }
+
+    }
+
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    val weekAsteroids: LiveData<List<Asteroid>> = MediatorLiveData<List<Asteroid>>().apply {
+        addSource(
+            database.asteroidDao.getAsteroidsDate(
+                startDate.format(DateTimeFormatter.ISO_DATE),
+                endDate.format(DateTimeFormatter.ISO_DATE)
+            )
+        ) {
+            val weekAsteroidList = it.toDomainModel()
+            value = weekAsteroidList
+        }
+
+    }
+
     /**
      * update the offline cache
      */
