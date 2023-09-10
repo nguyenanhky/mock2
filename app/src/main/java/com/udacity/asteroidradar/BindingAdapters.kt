@@ -56,7 +56,8 @@ fun bindPictureOfTheDay(imageView: ImageView, imageUrl: String?) {
     imageUrl?.let {
         val imageUri = it.toUri().buildUpon().scheme("https").build()
         val picasso = Picasso.Builder(imageView.context).build()
-        imageView.contentDescription = R.string.description_image.toString()
+        val description = imageView.context.getString(R.string.description_image)
+        imageView.contentDescription = description
         picasso
             .load(imageUri)
             .into(imageView)
