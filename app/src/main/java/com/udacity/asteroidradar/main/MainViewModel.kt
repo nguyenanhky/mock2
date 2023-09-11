@@ -43,13 +43,20 @@ class MainViewModel(application: Application) : ViewModel() {
         }
     }
 
-
     init {
         viewModelScope.launch {
-            pictureOfTheDayRepository.refreshPictureOfTheDay()
+            try {
+                pictureOfTheDayRepository.refreshPictureOfTheDay()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
         viewModelScope.launch {
-            asteroidRepository.refreshAsteroids()
+            try {
+                asteroidRepository.refreshAsteroids()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
     val asteroid = asteroidRepository.asteroids
