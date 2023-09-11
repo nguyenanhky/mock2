@@ -51,12 +51,12 @@ fun bindTextViewToDisplayVelocity(textView: TextView, number: Double) {
     textView.text = String.format(context.getString(R.string.km_s_unit_format), number)
 }
 
-@BindingAdapter("url")
-fun bindPictureOfTheDay(imageView: ImageView, imageUrl: String?) {
+@BindingAdapter("url","imageTitle")
+fun bindPictureOfTheDay(imageView: ImageView, imageUrl: String?,imageTitle: String?) {
     imageUrl?.let {
         val imageUri = it.toUri().buildUpon().scheme("https").build()
         val picasso = Picasso.Builder(imageView.context).build()
-        val description = imageView.context.getString(R.string.description_image)
+        val description = imageTitle ?: imageView.context.getString(R.string.description_image)
         imageView.contentDescription = description
         picasso
             .load(imageUri)
